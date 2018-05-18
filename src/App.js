@@ -51,6 +51,17 @@ class App extends Component {
 
   };
 
+  onClick = async () =>{
+    const accounts = await web3.eth.getAccounts();
+    this.setState({ message: 'Waiting on transaction success...'});
+
+    await lottery.methods.pickWinner().send({
+      from: accounts[0]
+    });
+
+    this.setState({message: 'A winner has been picked!'});
+  };
+
   render() {
     web3.eth.getAccounts().then(console.log);
     console.log(web3.version);
@@ -79,6 +90,10 @@ class App extends Component {
           </div>
           <button>Enter</button>
         </form>
+
+        <hr />
+        <h4> Ready to pick a winner? </h4>
+        <button onClick={this.onClick}>Pick a winner!</button>
 
         <hr />
         <h1>{this.state.message}</h1>
